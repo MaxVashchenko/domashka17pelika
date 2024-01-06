@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  mysql-master:
+    image: mysql:8.0
+    container_name: mysql-master
+    restart: "no"
+    env_file:
+      - ./master/mysql_master.env
+    volumes:
+      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./master/data:/var/lib/mysql
+    ports:
+      - 4406:3306
+    networks:
+      - dom17replica
+
+  mysql-slave:
+    image: mysql:8.0
+    container_name: mysql-slave
+    restart: "no"
+    env_file:
+      - ./slave/mysql_slave.env
+    volumes:
+      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./slave/data:/var/lib/mysql
+    ports:
+      - 5506:3306
+    networks:
+      - dom17replica
+
+volumes:
+  master-data:
+  slave-data:
+
+networks:
+  dom17replica:
